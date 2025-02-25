@@ -4,20 +4,27 @@ Welcome to laravel-aws-iac! This repo is my go-to Terraform-based solution for s
 
 ## Table of Contents
 
-1. Project Overview
-2. Architecture Overview
-3. Prerequisites
-4. Installation & Setup
+1. [Project Overview](#1-project-overview)
+2. [Architecture Overview](#2-architecture-overview)
+3. [Prerequisites](#3-prerequisites)
+4. [Installation & Setup](#4-installation--setup)
    - Terraform Backend
    - Environment Variables & Variables File
-5. Infrastructure Components - VPC & Networking - RDS Database - EKS Cluster - Redis ElastiCache - S3 Bucket for Logs - Secrets Management - IAM Roles & Policies
-   6 Deployment
-6. CI/CD with GitHub Actions
-7. Customization & Variables
-8. Troubleshooting & FAQ
-9. Future Enhancements
-10. Contributing
-11. License
+5. [Infrastructure Components](#5-infrastructure-components)
+   - VPC & Networking
+   - RDS Database
+   - EKS Cluster
+   - Redis ElastiCache
+   - S3 Bucket for Logs
+   - Secrets Management
+   - IAM Roles & Policies
+6. [Deployment](#6-deployment)
+7. [CI/CD with GitHub Actions](#7-cicd-with-github-actions)
+8. [Customization & Variables](#8-customization--variables)
+9. [Troubleshooting & FAQ](#9-troubleshooting--faq)
+10. [Future Enhancements](#10-future-enhancements)
+11. [Contributing](#11-contributing)
+12. [License](#12-license)
 
 ### 1. Project Overview
 
