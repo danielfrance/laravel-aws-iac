@@ -1,0 +1,5 @@
+.DS_Store
+.vscode/
+.terraform/
+terraform.tfvars
+.terraform.lock.hcl # I ignore this file in this template repo but NOT in production... and neither should you!
