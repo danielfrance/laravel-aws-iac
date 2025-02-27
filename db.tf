@@ -26,7 +26,7 @@ module "db" {
   # user cannot be used as it is a reserved word used by the engine"
   db_name  = var.db_name
   username = var.db_user
-  password = random_password.db_password.result
+  password = var.db_password
   port     = var.db_port
 
   publicly_accessible = false
@@ -36,7 +36,7 @@ module "db" {
   vpc_security_group_ids = [module.rds_security_group.security_group_id]
 
   # Backups & Monitoring
-  backup_retention_period               = 7 # Keep backups for 7 days
+  backup_retention_period               = 7 # Keep backups for 7 days or set an environment variable
   skip_final_snapshot                   = false
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
@@ -55,6 +55,7 @@ module "db" {
 
 }
 
+
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "${var.environment}-rds-subnet-group"
   subnet_ids = module.vpc.private_subnets
@@ -65,6 +66,10 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
   }
 }
 
+locals {
+  authorized_ips = can(regex("\\[", var.authorized_ips)) ? jsondecode(var.authorized_ips) : tolist([var.authorized_ips])
+
+}
 module "rds_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.0"
@@ -86,12 +91,12 @@ module "rds_security_group" {
 
   # Allow external access from whitelisted IPs
   ingress_with_cidr_blocks = [
-    {
+    for ip in local.authorized_ips : {
       from_port   = 5432
       to_port     = 5432
       protocol    = "tcp"
       description = "Allow access from authorized external users"
-      cidr_blocks = join(",", var.authorized_ips)
+      cidr_blocks = ip
     }
   ]
 
@@ -111,3 +116,4 @@ module "rds_security_group" {
     Environment = var.environment
   }
 }
+

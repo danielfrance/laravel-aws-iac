@@ -58,6 +58,7 @@ High-Level Picture:
 
 - [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- create a new AWS S3 bucket for your terraform state.
 - AWS IAM Permissions
   - TODO
 
@@ -132,7 +133,7 @@ Deploying the infrastructure is pretty straightforward:
 
 ### 7. CI/CD with GitHub Actions
 
-I've also set up a GitHub Actions workflow (coming soon in this repo) that automates the Terraform workflow:
+I've also set up a GitHub Actions workflow that automates the Terraform workflow:
 
 **What It Does:**
 
@@ -141,6 +142,12 @@ Runs terraform init, plan, and (optionally) apply on push or PR, ensuring your i
 **Why GitHub Actions?**
 
 It's an easy-to-use CI/CD tool that integrates seamlessly with GitHub, helping automate your deployments and catch issues early.
+
+**Secrets:**
+
+- GitHub Secrets and Variables only store strings, so for lists and maps, you'll need to store them as JSON-encoded strings and then decode them inside Terraform.
+
+- Under the Terraform Plan step, you'll notice the environment variables. Notice that the variables are prefixed with TF*VAR* following by the terraform variable name which is usually lowercase. This is intentional and important. Github Secrets will automatically be capitalized however to map them to your terraform variables you'll need to use the TF*VAR* prefix followed by the terraform variable exactly as it is in the variables.tf file.
 
 ### 8. Customization & Variables
 

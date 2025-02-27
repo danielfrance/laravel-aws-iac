@@ -14,11 +14,6 @@ output "eks_node_security_group_id" {
   value = module.eks.node_security_group_id
 }
 
-output "db_password" {
-  value     = random_password.db_password.result
-  sensitive = true
-}
-
 output "db_name" {
   value = module.db.db_instance_name
 }

@@ -4,6 +4,7 @@
 # TODO: use the `aws_elasticache_parameter_group` resource to create a parameter group for the redis cluster and apply it to the cluster. Remove the `create_parameter_group` and `parameter_group_family` from the module. AWS does not allow you to update the parameter group of an existing cluster. So we create one, apply it, and then update the cluster to use it rather than destroying the parameter group AND the cluster. This way we'll just destroy the parameter group and create a new one.
 
 
+
 resource "aws_elasticache_parameter_group" "redis_queue_pg_v1" {
   name        = "${var.environment}-${var.redis_cluster_id}-parameter-group-v1"
   family      = "redis7"

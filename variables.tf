@@ -21,7 +21,8 @@ variable "db_max_allocated_storage" {}
 
 
 variable "authorized_ips" {
-  type = list(string)
+  type        = any # Accepts both JSON (string) and list
+  description = "List of authorized IPs (JSON string in GitHub, list in local tfvars)"
 }
 
 variable "cluster_name" {}
@@ -39,11 +40,8 @@ variable "node_min_size" {}
 variable "node_size" {}
 
 variable "eks_access_entries" {
-  description = "List of IAM users/roles to be granted EKS access."
-  type = list(object({
-    name          = string
-    principal_arn = string
-  }))
+  type        = any # Accepts both JSON (string) and list
+  description = "JSON string containing EKS access entries"
 }
 
 variable "default_AWS_profile" {}

@@ -8,15 +8,16 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 
 locals {
-  vpc_cidr = "10.0.0.0/16"
-  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+  vpc_cidr           = "10.0.0.0/16"
+  azs                = slice(data.aws_availability_zones.available.names, 0, 3)
+  eks_access_entries = can(regex("\\[", var.eks_access_entries)) ? jsondecode(var.eks_access_entries) : [] # this is a little janky but it works. need to revisit.
 }
 
 
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "${var.environment}-laravel-deployment-vpc"
+  name = "${var.environment}-<CHOOSE-A-NAME>"
   cidr = var.vpc_cidr
 
   azs             = local.azs
@@ -137,7 +138,7 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    "${var.environment}-general-purpose" = {
+    "${var.environment}-gen-purpose" = {
       instance_types = ["t2.medium"]
       desired_size   = 2
       min_size       = 2
@@ -145,14 +146,14 @@ module "eks" {
 
       attach_cluster_primary_security_group = true
 
-      node_group_name = "${var.environment}-general-purpose"
+      node_group_name = "${var.environment}-gen-purpose"
 
       iam_role_arn = aws_iam_role.eks_node_role.arn
     }
   }
 
   # Add this section to configure dashboardcluster access policies for aws iam users
-  access_entries = { for entry in var.eks_access_entries :
+  access_entries = { for entry in local.eks_access_entries :
     entry.name => {
       principal_arn = entry.principal_arn
       policy_associations = {

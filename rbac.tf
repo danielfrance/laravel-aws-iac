@@ -27,7 +27,7 @@ resource "kubernetes_cluster_role_binding" "eks_admin_binding" {
   }
 
   dynamic "subject" {
-    for_each = var.eks_access_entries
+    for_each = local.eks_access_entries
     content {
       kind      = "User"
       name      = subject.value.principal_arn

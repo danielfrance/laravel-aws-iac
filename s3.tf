@@ -22,13 +22,23 @@ module "rds_logs_s3" {
         Sid    = "AllowCloudWatchLogsAccess",
         Effect = "Allow",
         Principal = {
-          Service = "logs.${var.region}.amazonaws.com"
+          Service = "logs.amazonaws.com"
         },
         Action   = "s3:PutObject",
         Resource = "${module.rds_logs_s3.s3_bucket_arn}/*"
+      },
+      {
+        Sid    = "AllowEKSUsersAccess",
+        Effect = "Allow",
+        Principal = {
+          AWS = local.eks_access_entries[0].principal_arn
+        },
+        Action   = ["s3:PutObject", "s3:GetObject", "s3:ListBucket"],
+        Resource = ["${module.rds_logs_s3.s3_bucket_arn}", "${module.rds_logs_s3.s3_bucket_arn}/*"]
       }
     ]
   })
+
 
   lifecycle_rule = [
     {
